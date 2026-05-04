@@ -19,7 +19,6 @@ variance = 1 / alpha
 
 
 # set your mu vector and Cov array
-variance
 mu = [0, 0]
 Cov = [[variance, 0.0],[0.0, variance]]
 
