@@ -2,6 +2,7 @@ import pylab as pb
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
+from scipy.stats import norm
 from math import pi
 from scipy.spatial.distance import cdist
 
@@ -14,10 +15,10 @@ w1list = np.linspace (-3.0, 3.0, 200)
 W0arr, W1arr = np.meshgrid (w0list, w1list)
 pos = np.dstack ((W0arr, W1arr))
 
-trainingX = [1.1, 1.3, 1.5]
+trainingX = [-1.5, -1.4, -1.3, -1.2, -1.1, 1.1, 1.2, 1.3, 1.4, 1.5]
 trainingT = []
 for x in trainingX:
-    trainingT = trainingT + [-1.2 + 0.9*x]
+    trainingT = trainingT + [-1.2 + 0.9*x + np.random.normal(0,0.2)]
 
 ones = []
 for x in trainingX:
@@ -30,8 +31,6 @@ wML = np.dot(np.dot(np.linalg.inv(np.transpose(np.dot(Xext,np.transpose(Xext))))
 alpha = 2
 beta = 2
 variance = 1 / alpha
-
-
 
 
 # set your mu vector and Cov array
@@ -47,13 +46,13 @@ for i in range(W0arr.shape[0]):
         w0 = W0arr[i,j]
         w1 = W1arr[i,j]
 
-        error = trainingT - (np.transpose(Xext) @ np.array([w0,w1]))
-        log_likelyhood = -0.5 * beta * np.sum(error**2)
-        likelyhood[i,j] = np.exp(log_likelyhood)
+        temp = 1
+        for k in range(len(trainingX)):
+            temp = temp * norm.pdf(trainingT[k], w0 + w1*trainingX[k], np.sqrt(1/beta))
+        
+        likelyhood[i,j] = temp
 
-#likelyhood = []
-#for t in trainingT:
-#    likelyhood = likelyhood * np.random.normal(t,1/beta)
+
 plt.figure(1)
 plt.contour (W0arr, W1arr, Wpriorpdf)
 plt.show()
