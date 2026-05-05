@@ -28,6 +28,7 @@ Xext = [ones, trainingX]
 
 wML = np.dot(np.dot(np.linalg.inv(np.transpose(np.dot(Xext,np.transpose(Xext)))), Xext), np.transpose(trainingT))
 
+
 alpha = 2
 beta = 2
 variance = 1 / alpha
@@ -40,17 +41,18 @@ Cov = [[variance, 0.0],[0.0, variance]] # Was we do in reality is to multiply th
 rv = multivariate_normal(mu, Cov)
 Wpriorpdf = rv.pdf(pos)
 
-likelyhood = np.zeros(W0arr.shape)
+likelyhood = np.zeros(W0arr.shape) # Creates all the available points
 for i in range(W0arr.shape[0]):
     for j in range(W0arr.shape[1]):
+        # Grabs positional values for w0 and w1
         w0 = W0arr[i,j]
         w1 = W1arr[i,j]
 
         temp = 1
         for k in range(len(trainingX)):
-            temp = temp * norm.pdf(trainingT[k], w0 + w1*trainingX[k], np.sqrt(1/beta))
+            temp = temp * norm.pdf(trainingT[k], w0 + w1*trainingX[k], np.sqrt(1/beta)) # Perform the Gaussian product equation as specified in eq 17
         
-        likelyhood[i,j] = temp
+        likelyhood[i,j] = temp # Sets final calculated value in the likelyhood plot
 
 
 plt.figure(1)
