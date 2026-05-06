@@ -35,10 +35,11 @@ for i in range(len(trainingT)):
 betaML = betaML/len(trainingT)
 betaML = 1/betaML
 
+print("Beta_ML:")
 print(betaML)
 
 alpha = 2
-#beta = 2
+beta = 2
 variance = 1 / alpha
 
 
@@ -64,7 +65,7 @@ for i in range(W0arr.shape[0]):
 
         temp = 1
         for k in range(len(trainingX)):
-            temp = temp * norm.pdf(trainingT[k], w0 + w1*trainingX[k], np.sqrt(1/betaML)) # Perform the Gaussian product equation as specified in eq 17
+            temp = temp * norm.pdf(trainingT[k], w0 + w1*trainingX[k], np.sqrt(1/beta)) # Perform the Gaussian product equation as specified in eq 17
             
         likelyhood[i,j] = temp # Sets final calculated value in the likelyhood plot
 print("Finished training")
@@ -72,8 +73,8 @@ print("Finished training")
 plt.contour(W0arr, W1arr, likelyhood)
 plt.show()"""
 
-sInv = np.array([[alpha,0],[0,alpha]]) + betaML*np.dot(Xext, np.transpose(Xext))
-mN = betaML * np.dot(np.dot(np.linalg.inv(sInv),Xext), np.transpose(trainingT))
+sInv = np.array([[alpha,0],[0,alpha]]) + beta*np.dot(Xext, np.transpose(Xext))
+mN = beta * np.dot(np.dot(np.linalg.inv(sInv),Xext), np.transpose(trainingT))
 
 posterior = multivariate_normal(mN, np.linalg.inv(sInv))
 Wposteriorpdf = posterior.pdf(pos)
@@ -111,11 +112,16 @@ testingX = [-1.5, -1.4, -1.3, -1.2, -1.1, 1.1, 1.2, 1.3, 1.4, 1.5]
 
 my = []
 stdDiv = []
+mlPred = []
 for i in range(len(testingX)):
     my = my + [np.dot(mN, [1, testingX[i]])]
 
-    stdDiv = stdDiv + [np.sqrt(1/betaML + np.dot(np.dot([1, testingX[i]],np.linalg.inv(sInv)), np.transpose([1, testingX[i]])))]
+    stdDiv = stdDiv + [np.sqrt(1/beta + np.dot(np.dot([1, testingX[i]],np.linalg.inv(sInv)), np.transpose([1, testingX[i]])))]
+
+    mlPred = mlPred + [wML[0] + wML[1]*testingX[i]]
+
 
 plt.figure(6)
 plt.errorbar(testingX, my, stdDiv)
+plt.plot(testingX, mlPred)
 plt.show()
