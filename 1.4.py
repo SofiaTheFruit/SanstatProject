@@ -78,6 +78,10 @@ samples = posterior.rvs(5)
 x = np.array([-1.5, -1.4, -1.3, -1.2, -1.1, 1.1, 1.2, 1.3, 1.4, 1.5])
 y = [0,0,0,0,0]
 
+testingT = []
+for point in x:
+    testingT += [-1.2 + 0.9*point + np.random.normal(0,0.2)]
+
 for i in range(5):
     y[i] = samples[i][0] + x*samples[i][1]
 
@@ -86,4 +90,5 @@ plt.figure(4)
 for line in y:
     plt.plot(x,line)
 plt.plot(trainingX, trainingT, 'o')
+plt.plot(x, testingT, 'o')
 plt.show()
