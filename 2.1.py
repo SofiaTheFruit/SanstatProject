@@ -33,9 +33,6 @@ for x1 in x[0]:
     t += [temp]
 
 X,Y = np.meshgrid(x[0],x[1])
-print(x[0])
-print()
-print(x[1])
 
 plt.figure(1)
 ax = plt.axes(projection = '3d')
