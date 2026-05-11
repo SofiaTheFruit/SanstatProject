@@ -56,11 +56,23 @@ for x1 in trainX[0]:
     for x2 in trainX[1]:
         temp += [x1*x1*2.5 + (-0.5)*x2*x2*x2 + np.random.normal(0,sigma)]
     ttrain += temp
+print()
+print(ttrain)
+print()
 
 trX,trY = np.meshgrid(trainX[0],trainX[1])
 
+Xext = []
+for x1 in trainX[0]:
+    for x2 in trainX[1]:
+        Xext += [[1, x1, x2]]
+print(Xext)
+print(np.transpose(Xext))
 
+wML = np.dot(np.dot(np.linalg.inv(np.dot(np.transpose(Xext), Xext)), np.transpose(Xext)), ttrain)
 
+print("wML")
+print(wML)
 
 
 

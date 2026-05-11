@@ -30,7 +30,7 @@ for x1 in x[0]:
     temp = []
     for x2 in x[1]:
         temp += [x1*x1*2.5 + (-0.5)*x2*x2*x2 + np.random.normal(0,sigma)]
-    t += [temp]
+    t += temp
 
 X,Y = np.meshgrid(x[0],x[1])
 
