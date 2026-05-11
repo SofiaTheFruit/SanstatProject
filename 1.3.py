@@ -15,7 +15,7 @@ w1list = np.linspace (-3.0, 3.0, 200)
 W0arr, W1arr = np.meshgrid (w0list, w1list)
 pos = np.dstack ((W0arr, W1arr))
 
-trainingX = [-1.5, -1.4, -1.3, -1.2, -1.1, 1.1, 1.2, 1.3, 1.4, 1.5]
+trainingX = np.arange(-1, 1.01, 0.01)
 trainingT = []
 for x in trainingX:
     trainingT = trainingT + [-1.2 + 0.9*x + np.random.normal(0,0.2)]
@@ -26,8 +26,7 @@ for x in trainingX:
 
 Xext = [ones, trainingX]
 
-wML = np.dot(np.dot(np.linalg.inv(np.transpose(np.dot(Xext,np.transpose(Xext)))), Xext), np.transpose(trainingT))
-
+#wML = np.dot(np.dot(np.linalg.inv(np.transpose(np.dot(Xext,np.transpose(Xext)))), Xext), np.transpose(trainingT))
 
 alpha = 2
 beta = 2
@@ -41,7 +40,13 @@ Cov = [[variance, 0.0],[0.0, variance]] # Was we do in reality is to multiply th
 rv = multivariate_normal(mu, Cov)
 Wpriorpdf = rv.pdf(pos)
 
+
+"""plt.figure(1)
+plt.contour (W0arr, W1arr, Wpriorpdf)
+plt.show()"""
+
 likelyhood = np.zeros(W0arr.shape) # Creates all the available points
+print("Training")
 for i in range(W0arr.shape[0]):
     for j in range(W0arr.shape[1]):
         # Grabs positional values for w0 and w1
@@ -51,23 +56,18 @@ for i in range(W0arr.shape[0]):
         temp = 1
         for k in range(len(trainingX)):
             temp = temp * norm.pdf(trainingT[k], w0 + w1*trainingX[k], np.sqrt(1/beta)) # Perform the Gaussian product equation as specified in eq 17
-        
+            
         likelyhood[i,j] = temp # Sets final calculated value in the likelyhood plot
-
-
-plt.figure(1)
-plt.contour (W0arr, W1arr, Wpriorpdf)
-plt.show()
-
-plt.figure(2)
+print("Finished training")
+"""plt.figure(2)
 plt.contour(W0arr, W1arr, likelyhood)
-plt.show()
+plt.show()"""
 
 sInv = np.array([[alpha,0],[0,alpha]]) + beta*np.dot(Xext, np.transpose(Xext))
 mN = beta * np.dot(np.dot(np.linalg.inv(sInv),Xext), np.transpose(trainingT))
 
-rv = multivariate_normal(mN, np.linalg.inv(sInv))
-Wposteriorpdf = rv.pdf(pos)
+posterior = multivariate_normal(mN, np.linalg.inv(sInv))
+Wposteriorpdf = posterior.pdf(pos)
 
 plt.figure(3)
 plt.contour(W0arr, W1arr, Wposteriorpdf)
