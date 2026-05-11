@@ -22,8 +22,14 @@ trainingSubsetOne = np.array([-1, 0.35, 0.79])
 trainingSubsetTwo = np.array([-1, -0.89, -0.65, -0.55, -0.43, -0.03, 0, 0.35, 0.5, 0.79])
 trainingSubsetThree = np.array([-1, -0.89, -0.79, -0.65, -0.55, -0.5, -0.43, -0.35 -0.03, 0, 0.01, 0.03, 0.35, 0.43, 0.5, 0.55, 0.65, 0.79, 0.89, 1])
 trainingSubsetFour = []
+usedIndex = []
 for i in range(100):
-    trainingSubsetFour += [float(trainingX[np.random.randint(0,len(trainingX))])]
+    while(1):
+        index = np.random.randint(0, len(trainingX))
+        if index not in usedIndex:
+            trainingSubsetFour += [float(trainingX[np.random.randint(0,len(trainingX))])]
+            usedIndex += [index]
+            break
 
 trainingSubsetFour.sort()
 trainingSubsetFour = np.array(trainingSubsetFour)
