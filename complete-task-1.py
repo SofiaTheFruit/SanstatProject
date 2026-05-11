@@ -49,6 +49,16 @@ Xext = [ones, trainingX]
 
 wML = np.dot(np.dot(np.linalg.inv(np.transpose(np.dot(Xext,np.transpose(Xext)))), Xext), np.transpose(trainingT))
 
+betaML = 0
+for i in range(len(trainingT)):
+    betaML = betaML + np.square(trainingT[i] - np.dot(wML,np.transpose([1, trainingX[i]])))
+
+betaML = betaML/len(trainingT)
+betaML = 1/betaML
+
+print("Beta_ML:")
+print(betaML)
+
 alpha = 2
 beta = 2
 variance = 1 / alpha
