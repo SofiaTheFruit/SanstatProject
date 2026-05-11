@@ -22,8 +22,14 @@ trainingSubsetOne = np.array([-1, 0.35, 0.79])
 trainingSubsetTwo = np.array([-1, -0.89, -0.65, -0.55, -0.43, -0.03, 0, 0.35, 0.5, 0.79])
 trainingSubsetThree = np.array([-1, -0.89, -0.79, -0.65, -0.55, -0.5, -0.43, -0.35 -0.03, 0, 0.01, 0.03, 0.35, 0.43, 0.5, 0.55, 0.65, 0.79, 0.89, 1])
 trainingSubsetFour = []
+usedIndex = []
 for i in range(100):
-    trainingSubsetFour += [float(trainingX[np.random.randint(0,len(trainingX))])]
+    while(1):
+        index = np.random.randint(0, len(trainingX))
+        if index not in usedIndex:
+            trainingSubsetFour += [float(trainingX[np.random.randint(0,len(trainingX))])]
+            usedIndex += [index]
+            break
 
 trainingSubsetFour.sort()
 trainingSubsetFour = np.array(trainingSubsetFour)
@@ -48,6 +54,16 @@ for x in trainingX:
 Xext = [ones, trainingX]
 
 wML = np.dot(np.dot(np.linalg.inv(np.transpose(np.dot(Xext,np.transpose(Xext)))), Xext), np.transpose(trainingT))
+
+betaML = 0
+for i in range(len(trainingT)):
+    betaML = betaML + np.square(trainingT[i] - np.dot(wML,np.transpose([1, trainingX[i]])))
+
+betaML = betaML/len(trainingT)
+betaML = 1/betaML
+
+print("Beta_ML:")
+print(betaML)
 
 alpha = 2
 beta = 2
