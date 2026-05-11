@@ -77,6 +77,19 @@ betaML = 1/betaML
 print("betaML:")
 print(betaML)
 
+predT = []
+for i in range(len(testX[0])):
+    for j in range(len(testX[1])):
+        predT += [wML[0] + wML[1]*testX[0][i] + wML[2]*testX[1][j]*testX[1][j]]
+
+total = 0
+for i in range(len(predT)):
+    total += np.square(predT[i] - ttest[i])
+total = total/len(predT)
+
+print("MSE:")
+print(total)
+
 
 plt.figure(1)
 ax = plt.axes(projection = '3d')
