@@ -70,6 +70,7 @@ wML = np.dot(np.dot(np.linalg.inv(np.dot(np.transpose(Xext), Xext)), np.transpos
 
 print("wML:")
 print(wML)
+print()
 
 betaML = 0
 for i in range(len(trainX[0])):
@@ -81,6 +82,7 @@ betaML = 1/betaML
 
 print("betaML:")
 print(betaML)
+print()
 
 predT = []
 for i in range(len(testX[0])):
@@ -94,25 +96,23 @@ total = total/len(predT)
 
 print("MSE:")
 print(total)
+print()
 
-alpha = 0.2
+alpha = [0.2,0.8,2]
 beta = 1/sigma
 
+my = [[],[],[]]
+stdDiv = [[],[],[]]
+sInv = [[],[],[]]
+mN = [[],[],[]]
+for i in range(len(alpha)):
+    sInv[i] = np.array([[alpha[i],0, 0],[0,alpha[i], 0], [0, 0, alpha[i]]]) + beta*np.dot(np.transpose(Xext), Xext)
+    mN[i] = beta * np.dot(np.dot(np.linalg.inv(sInv[i]),np.transpose(Xext)), np.transpose(ttrain))
 
+    for x in Xext2:
+        my[i] = my[i] + [np.dot(mN[i], x)]
 
-sInv = np.array([[alpha,0, 0],[0,alpha, 0], [0, 0, alpha]]) + beta*np.dot(np.transpose(Xext), Xext)
-mN = beta * np.dot(np.dot(np.linalg.inv(sInv),np.transpose(Xext)), np.transpose(ttrain))
-print(mN)
-
-my = []
-stdDiv = []
-for x in Xext2:
-    my = my + [np.dot(mN, x)]
-
-    stdDiv = stdDiv + [np.sqrt(1/beta + np.dot(np.dot(x,np.linalg.inv(sInv)), np.transpose(x)))]
-
-print("my")
-print(my)
+        stdDiv[i] = stdDiv[i] + [np.sqrt(1/beta + np.dot(np.dot(x,np.linalg.inv(sInv[i])), np.transpose(x)))]
 
 
 
@@ -126,7 +126,6 @@ ax.set_xlabel('x_1')
 ax.set_ylabel('x_2')
 ax.set_zlabel('ttest')
 ax.plot3D(teX.flatten(), teY.flatten(), np.array(ttest).flatten(), 'o')
-plt.show()
 
 plt.figure(2)
 ax = plt.axes(projection = '3d')
@@ -134,15 +133,29 @@ ax.set_xlabel('x_1')
 ax.set_ylabel('x_2')
 ax.set_zlabel('ttrain')
 ax.plot3D(trX.flatten(), trY.flatten(), np.array(ttrain).flatten(), 'o')
-plt.show()
 
 
-plt.figure(1)
-ax = plt.axes(projection = '3d')
+fig = plt.figure(3)
+ax = fig.add_subplot(2,2,1,projection = '3d')
+ax.set_title('Alpha: 0.2')
 ax.set_xlabel('x_1')
 ax.set_ylabel('x_2')
-ax.set_zlabel('ttest')
-ax.plot_surface(teX, teY, np.array(my).reshape(teX.shape), color='pink')
-ax.errorbar(teX.flatten(), teY.flatten(), my, zerr=stdDiv, fmt='^')
+ax.set_zlabel('Predicted T')
+ax.plot_surface(teX, teY, np.array(my[0]).reshape(teX.shape), color='pink')
+ax.errorbar(teX.flatten(), teY.flatten(), my[0], zerr=stdDiv[0], fmt='o')
+ax = fig.add_subplot(2,2,2,projection = '3d')
+ax.set_title('Alpha: 0.8')
+ax.set_xlabel('x_1')
+ax.set_ylabel('x_2')
+ax.set_zlabel('Predicted T')
+ax.plot_surface(teX, teY, np.array(my[1]).reshape(teX.shape), color='pink')
+ax.errorbar(teX.flatten(), teY.flatten(), my[1], zerr=stdDiv[1], fmt='o')
+ax = fig.add_subplot(2,2,3,projection = '3d')
+ax.set_title('Alpha: 2.0')
+ax.set_xlabel('x_1')
+ax.set_ylabel('x_2')
+ax.set_zlabel('Predicted T')
+ax.plot_surface(teX, teY, np.array(my[2]).reshape(teX.shape), color='pink')
+ax.errorbar(teX.flatten(), teY.flatten(), my[2], zerr=stdDiv[2], fmt='o')
 
 plt.show()
