@@ -35,9 +35,6 @@ for i in range(10):
         testX[1] += [x[1][i]]
     else:
         trainX[1] += [x[1][i]]
- 
-print(testX)
-print(trainX)
 
 sigma = 0.3
 
@@ -66,9 +63,19 @@ for x1 in trainX[0]:
 
 wML = np.dot(np.dot(np.linalg.inv(np.dot(np.transpose(Xext), Xext)), np.transpose(Xext)), ttrain)
 
-print("wML")
+print("wML:")
 print(wML)
 
+betaML = 0
+for i in range(len(trainX[0])):
+    for j in range(len(trainX[1])):
+        betaML = betaML + np.square(ttrain[i+len(trainX[0])*j] - np.dot(wML,np.transpose([1, trainX[0][i], trainX[1][j]])))
+
+betaML = betaML/len(ttrain)
+betaML = 1/betaML
+
+print("betaML:")
+print(betaML)
 
 
 plt.figure(1)
