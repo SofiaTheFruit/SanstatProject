@@ -15,6 +15,8 @@ w1list = np.linspace (-3.0, 3.0, 200)
 W0arr, W1arr = np.meshgrid (w0list, w1list)
 pos = np.dstack ((W0arr, W1arr))
 
+sigma = 0.2
+
 
 trainingX = np.arange(-1, 1.01, 0.01)
 
@@ -40,12 +42,12 @@ trainingSubsetsT = []
 for i in range(len(trainingSubsetsX)):
     temp =[]
     for x in trainingSubsetsX[i]:
-        temp += [-1.2 + 0.9*x + np.random.normal(0,0.2)]
+        temp += [-1.2 + 0.9*x + np.random.normal(0,sigma)]
     trainingSubsetsT += [temp]
 
 trainingT = []
 for x in trainingX:
-    trainingT = trainingT + [-1.2 + 0.9*x + np.random.normal(0,0.2)]
+    trainingT = trainingT + [-1.2 + 0.9*x + np.random.normal(0,sigma)]
 
 ones = []
 for x in trainingX:
@@ -66,7 +68,7 @@ print("Beta_ML:")
 print(betaML)
 
 alpha = 2
-beta = 2
+beta = 1/sigma
 variance = 1 / alpha
 
 
