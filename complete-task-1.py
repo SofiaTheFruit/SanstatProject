@@ -82,6 +82,8 @@ Wpriorpdf = rv.pdf(pos)
 
 plt.figure(1)
 plt.contour (W0arr, W1arr, Wpriorpdf)
+plt.xlabel("w_0")
+plt.ylabel("w_1")
 
 subsetLikelyhood = [1,1,1,1]
 
@@ -113,20 +115,30 @@ print("Finished training")
 plt.figure(2)
 plt.title("200 data points")
 plt.contour(W0arr, W1arr, likelyhood)
+plt.xlabel("w_0")
+plt.ylabel("w_1")
 
 plt.figure(3)
 plt.subplot(2,2,1)
 plt.title("3 data points")
 plt.contour(W0arr, W1arr, subsetLikelyhood[0])
+plt.xlabel("w_0")
+plt.ylabel("w_1")
 plt.subplot(2,2,2)
 plt.title("10 data points")
 plt.contour(W0arr, W1arr, subsetLikelyhood[1])
+plt.xlabel("w_0")
+plt.ylabel("w_1")
 plt.subplot(2,2,3)
 plt.title("20 data points")
 plt.contour(W0arr, W1arr, subsetLikelyhood[2])
+plt.xlabel("w_0")
+plt.ylabel("w_1")
 plt.subplot(2,2,4)
 plt.title("100 data points")
 plt.contour(W0arr, W1arr, subsetLikelyhood[3])
+plt.xlabel("w_0")
+plt.ylabel("w_1")
 
 
 sInv = np.array([[alpha,0],[0,alpha]]) + beta*np.dot(Xext, np.transpose(Xext))
@@ -137,6 +149,8 @@ Wposteriorpdf = posterior.pdf(pos)
 
 plt.figure(4)
 plt.contour(W0arr, W1arr, Wposteriorpdf)
+plt.xlabel("w_0")
+plt.ylabel("w_1")
 
 samples = posterior.rvs(5)
 
@@ -156,6 +170,8 @@ for line in y:
     plt.plot(x,line)
 plt.plot(trainingX, trainingT, 'o')
 plt.plot(x, testingT, 'o')
+plt.xlabel("x")
+plt.ylabel("t")
 
 testingX = [-1.5, -1.4, -1.3, -1.2, -1.1, 1.1, 1.2, 1.3, 1.4, 1.5]
 
@@ -176,4 +192,6 @@ for i in range(len(testingX)):
 plt.figure(6)
 plt.errorbar(testingX, my, stdDiv)
 plt.plot(testingX, mlPred)
+plt.xlabel("x")
+plt.ylabel("t")
 plt.show()
